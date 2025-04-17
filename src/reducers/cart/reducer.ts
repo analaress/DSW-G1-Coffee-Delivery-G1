@@ -10,6 +10,11 @@ export interface Item {
 export interface Order extends OrderInfo {
   id: number
   items: Item[]
+  addItem: (item: Item) => void
+  removeItem: (itemId: Item['id']) => void
+  decrementItemQuantity: (itemId: Item['id']) => void
+  incrementItemQuantity: (itemId: Item['id']) => void
+  checkout: (order: OrderInfo) => void
 }
 
 interface CartState {

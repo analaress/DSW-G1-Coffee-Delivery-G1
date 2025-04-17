@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import {
   Bank,
   CreditCard,
@@ -23,6 +23,7 @@ import {
 import { Tags } from '../../components/CoffeeCard/styles';
 import { QuantityInput } from '../../components/Form/QuantityInput';
 import { Radio } from '../../components/Form/Radio';
+import { useCart } from '../../hooks/useCart';
 
 export interface Item {
   id: string
@@ -92,7 +93,32 @@ export function Cart() {
     return currencyValue + coffee.price * coffee.quantity
   }, 0);
 
-  function handleItemIncrement(id: string) {
+
+  function selecionaCredito() {
+    // const filtrados = coffeesInCart.map((coffee) => {
+    //   {...coffeesInCart, price: coffeesInCart.price * 1,0385 }
+    // });
+  
+    // setCoffees(filtrados);
+  }
+
+  function selecionaDebito() {
+    // const filtrados = coffeesInCart.map((coffee) => {
+    //   {...coffeesInCart, price: coffeesInCart.price * 1,85 }
+    // });
+  
+    // setCoffees(filtrados);
+  }
+
+  function selecionaCash() {
+    // const filtrados = coffeesInCart.map((coffee) => {
+    //   {...coffeesInCart, price: coffeesInCart.price }
+    // });
+  
+    // setCoffees(filtrados);
+  }
+
+  function handleItemIncrement() {
     setCoffeesInCart((prevState) =>
       prevState.map((coffee) => {
         if (coffee.id === id) {
@@ -156,7 +182,7 @@ export function Cart() {
               <div>
                 <Radio
                   isSelected={false}
-                  onClick={() => {}}
+                  onClick={() => {selecionaCredito}}
                   value="credit"
                 >
                   <CreditCard size={16} />
@@ -165,7 +191,7 @@ export function Cart() {
 
                 <Radio
                   isSelected={false}
-                  onClick={() => {}}
+                  onClick={() => {selecionaDebito}}
                   value="debit"
                 >
                   <Bank size={16} />
@@ -174,7 +200,7 @@ export function Cart() {
 
                 <Radio
                   isSelected={true}
-                  onClick={() => {}}
+                  onClick={() => {selecionaCash}}
                   value="cash"
                 >
                   <Money size={16} />

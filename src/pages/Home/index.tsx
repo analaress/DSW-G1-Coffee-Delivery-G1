@@ -23,17 +23,28 @@ export function Home() {
   const theme = useTheme();
   const [coffees, setCoffees] = useState<Coffee[]>([]);
 
+
   useEffect(() => {
     async function fetchCoffees() {
       const response = await api('/coffees');
-      setCoffees(response.data);
+      setCoffees((response.data).sort());
+
 
       console.log({coffees: response.data});
+
     }
     fetchCoffees();
   }, []);
 
 
+
+  function selecionaCategoria(tipo: string) {
+    const filtrados = coffees.filter((coffee) => {
+      return coffee.tags.includes(tipo);
+    });
+  
+    setCoffees(filtrados);
+  }
   
   function incrementQuantity(id: string) {
     setCoffees((prevState) =>
@@ -59,6 +70,7 @@ export function Home() {
             quantity: coffee.quantity - 1,
           }
         }
+
         return coffee
       }),
     );
@@ -67,15 +79,17 @@ export function Home() {
   function handleFavoriteCoffee(id: string) {
     setCoffees((prevState) =>
       prevState.map((coffee) => {
+        console.log(coffee.favorite)
         if (coffee.id === id) {
           return {
             ...coffee,
-            favorite: !coffee.favorite,
+            favorite: true,
           }
         }
         return coffee
       }),
     )
+  
     
   }
 
@@ -147,21 +161,21 @@ export function Home() {
         <h2>Nossos cafés</h2>
         <Navbar>
           <Radio
-            onClick={() => {}}
+            onClick={() => {selecionaCategoria('tradicional')}}
             isSelected={false}
             value="tradicional"
           >
             <span>Tradicional</span>
           </Radio>
           <Radio
-            onClick={() => {}}
+            onClick={() => {selecionaCategoria('gelado')}}
             isSelected={false}
             value="gelado"
           >
             <span>Gelado</span>
           </Radio>
           <Radio
-            onClick={() => {}}
+            onClick={() => {selecionaCategoria('com leite')}}
             isSelected={false}
             value="com leite"
           >
