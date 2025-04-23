@@ -22,6 +22,7 @@ interface Coffee {
 export function Home() {
   const theme = useTheme();
   const [coffees, setCoffees] = useState<Coffee[]>([]);
+  const [selected, setSelected] = useState(false);
 
 
   useEffect(() => {
@@ -37,14 +38,33 @@ export function Home() {
   }, []);
 
 
+    function selecionaCategoriaTradicional() {
+      console.log(selected)
+      let filtrados = []
+      if (selected) {
+        filtrados = coffees.filter((coffee) => 
+           coffee.tags.includes('tradicional')
+        );
 
-  function selecionaCategoria(tipo: string) {
-    const filtrados = coffees.filter((coffee) => {
-      return coffee.tags.includes(tipo);
-    });
+
+      }
   
-    setCoffees(filtrados);
+      else {
+        filtrados = coffees;
+      }
+      console.log(filtrados)
+  
+      setCoffees(filtrados);
+      
   }
+
+
+  useEffect(() => {
+    console.log('disparou')
+    selecionaCategoriaTradicional();
+
+  }, [selected])
+
   
   function incrementQuantity(id: string) {
     setCoffees((prevState) =>
@@ -61,6 +81,13 @@ export function Home() {
     );
   }
 
+  const handleClick = () => {
+    setSelected((prev) => {
+      const newSelected = !prev;
+      selecionaCategoriaTradicional(); // Chama a função logo após a alteração do estado
+      return newSelected; // Retorna o novo valor de selected
+    });
+  }
   function decrementQuantity(id: string) {
     setCoffees((prevState) =>
       prevState.map((coffee) => {
@@ -90,7 +117,6 @@ export function Home() {
       }),
     )
   
-    
   }
 
   return (
@@ -161,21 +187,21 @@ export function Home() {
         <h2>Nossos cafés</h2>
         <Navbar>
           <Radio
-            onClick={() => {selecionaCategoria('tradicional')}}
-            isSelected={false}
+            onClick={() => {handleClick()}}
+            isSelected={selected}
             value="tradicional"
           >
             <span>Tradicional</span>
           </Radio>
           <Radio
-            onClick={() => {selecionaCategoria('gelado')}}
+            onClick={() => {}}
             isSelected={false}
             value="gelado"
           >
             <span>Gelado</span>
           </Radio>
           <Radio
-            onClick={() => {selecionaCategoria('com leite')}}
+            onClick={() => {}}
             isSelected={false}
             value="com leite"
           >
