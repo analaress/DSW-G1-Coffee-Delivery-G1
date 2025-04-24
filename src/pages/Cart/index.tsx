@@ -48,6 +48,7 @@ interface CoffeeInCart {
 const DELIVERY_PRICE = 3.75;
 
 export function Cart() {
+  const [selected, setSelected] = useState<string | null>(null);
   const [coffeesInCart, setCoffeesInCart] = useState<CoffeeInCart[]>([
     {
       id: "0",
@@ -181,7 +182,7 @@ export function Cart() {
             <PaymentOptions>
               <div>
                 <Radio
-                  isSelected={false}
+                  isSelected={selected === 'credit'}
                   onClick={() => {selecionaCredito}}
                   value="credit"
                 >
@@ -190,7 +191,7 @@ export function Cart() {
                 </Radio>
 
                 <Radio
-                  isSelected={false}
+                  isSelected={selected === 'debit'}
                   onClick={() => {selecionaDebito}}
                   value="debit"
                 >
@@ -199,7 +200,7 @@ export function Cart() {
                 </Radio>
 
                 <Radio
-                  isSelected={true}
+                  isSelected={selected === 'cash'}
                   onClick={() => {selecionaCash}}
                   value="cash"
                 >

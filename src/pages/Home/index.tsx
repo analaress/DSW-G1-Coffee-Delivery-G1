@@ -22,35 +22,35 @@ interface Coffee {
 export function Home() {
   const theme = useTheme();
   const [coffees, setCoffees] = useState<Coffee[]>([]);
-  const [selected, setSelected] = useState(false);
+  const [backup, setBackup] = useState<Coffee[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
 
 
   useEffect(() => {
     async function fetchCoffees() {
       const response = await api('/coffees');
-      setCoffees((response.data).sort());
-
-
-      console.log({coffees: response.data});
-
+      setCoffees([...response.data].sort((a, b) => a.title.localeCompare(b.title)));
     }
     fetchCoffees();
   }, []);
 
 
-    function selecionaCategoriaTradicional() {
-      console.log(selected)
+    function selecionaCategoriaTradicional(tipo: string) {
       let filtrados = []
-      if (selected) {
+
+      if (tipo) {
+        console.log('coffees', coffees)
         filtrados = coffees.filter((coffee) => 
-           coffee.tags.includes('tradicional')
+           coffee.tags.includes(tipo)
         );
 
-
+        setBackup([...coffees]);
       }
   
       else {
-        filtrados = coffees;
+        filtrados = backup;
+        console.log('no else', filtrados)
+
       }
       console.log(filtrados)
   
@@ -61,7 +61,10 @@ export function Home() {
 
   useEffect(() => {
     console.log('disparou')
-    selecionaCategoriaTradicional();
+    console.log('selected', selected)
+    if (selected) {
+      selecionaCategoriaTradicional(selected);
+    }
 
   }, [selected])
 
@@ -81,13 +84,7 @@ export function Home() {
     );
   }
 
-  const handleClick = () => {
-    setSelected((prev) => {
-      const newSelected = !prev;
-      selecionaCategoriaTradicional(); // Chama a função logo após a alteração do estado
-      return newSelected; // Retorna o novo valor de selected
-    });
-  }
+  
   function decrementQuantity(id: string) {
     setCoffees((prevState) =>
       prevState.map((coffee) => {
@@ -187,22 +184,22 @@ export function Home() {
         <h2>Nossos cafés</h2>
         <Navbar>
           <Radio
-            onClick={() => {handleClick()}}
-            isSelected={selected}
+            onClick={() => {selecionaCategoriaTradicional('tradicional')}}
+            isSelected={selected === 'tradicional'}
             value="tradicional"
           >
             <span>Tradicional</span>
           </Radio>
           <Radio
-            onClick={() => {}}
-            isSelected={false}
+            onClick={() => {selecionaCategoriaTradicional('gelado')}}
+            isSelected={selected === 'gelado'}
             value="gelado"
           >
             <span>Gelado</span>
           </Radio>
           <Radio
-            onClick={() => {}}
-            isSelected={false}
+            onClick={() => {selecionaCategoriaTradicional('com leite')}}
+            isSelected={selected === 'com leite'}
             value="com leite"
           >
             <span>Com leite</span>
